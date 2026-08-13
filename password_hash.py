@@ -1,28 +1,68 @@
 import hashlib
-import random
+import secrets
+import string
 
-print("ENTER THE CHOICE 1 OR 2")
-print("""1. For hash your own password
-         2. To generate new password
+
+def hash_password(password):
+    return hashlib.sha256(password.encode()).hexdigest()
+
+
+def generate_password(length=16):
+    characters = string.ascii_letters + string.digits + string.punctuation
+    return ''.join(secrets.choice(characters) for _ in range(length))
+
+
+print("=" * 60)
+print("        PASSWORD SECURITY TOOL")
+print("=" * 60)
+
+print("""
+1. Hash your password
+2. Generate a secure password
+3. Verify a password
+4. Exit
 """)
-choice=int(input("ENTER YOUR CHOICE:"))
-if choice==1:
-    password=input("ENTER YOUR PASSWORD FOR HASHING:")
-    hashed_pass=hashlib.sha256(password.encode()).hexdigest()
-    print("PASSWORD HAHSED SUCCESSFULLY!!")
-    print("Your Hashed Password is: ",hashed_pass)
-    print("\n")
-    print("**"*62)
-    print("DO YOU WANT TO VERIFY YOUR HASHED PASSWORD enter y for yes and n for no")
-    choice_check=input("y/n:")
-    if choice_check=="y":
-        print("WE ARE VERIFIYING YOUR PASSWORD!!")
-        hash_pass=input("ENTER YOUR PASSWORD FOR VERITIFICATION:")
-        hashed_pass=hashlib.sha256(check_pass.encode()).hexdigest()
-        if check_pass==hashed_pass:
-            print("PASSWORD VERIFIED SUCCESSFULLY")
-        else:
-            print("WRONG PASSWORD")
-    elif choice_check=="n":
-        print("YOU DO NOT WANT TO VERIFY YOUR PASSWORD!!")
-        print("exiting....")
+
+choice = input("ENTER YOUR CHOICE: ")
+
+if choice == "1":
+
+    password = input("ENTER YOUR PASSWORD: ")
+
+    hashed_password = hash_password(password)
+
+    print("\nPASSWORD HASHED SUCCESSFULLY!")
+    print("SHA-256 Hash:")
+    print(hashed_password)
+
+elif choice == "2":
+
+    length = int(input("ENTER PASSWORD LENGTH: "))
+
+    if length < 8:
+        print("Password length should be at least 8 characters.")
+    else:
+        password = generate_password(length)
+
+        print("\nSECURE PASSWORD GENERATED:")
+        print(password)
+
+elif choice == "3":
+
+    original_hash = input("ENTER THE STORED HASH: ")
+    password = input("ENTER PASSWORD FOR VERIFICATION: ")
+
+    new_hash = hash_password(password)
+
+    if new_hash == original_hash:
+        print("\nPASSWORD VERIFIED SUCCESSFULLY!")
+    else:
+        print("\nWRONG PASSWORD!")
+
+elif choice == "4":
+
+    print("Exiting...")
+
+else:
+
+    print("INVALID CHOICE!")
